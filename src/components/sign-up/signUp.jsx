@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import './signup.scss';
+import { UserContext } from '../../context/userContext';
 import {
 	createAuthUserWithEmailAndPassword,
 	createUserDocumentFromAuth,
@@ -19,6 +20,8 @@ const SignUpForm = () => {
 	const [formData, setFormData] = useState(formFields);
 	const { displayName, email, password, confirmPassword } = formData;
 
+	const { setCurrentUser } = useContext(UserContext);
+
 	const handleChange = (event) => {
 		const { name, value } = event.target;
 		setFormData({ ...formData, [name]: value });
@@ -37,6 +40,8 @@ const SignUpForm = () => {
 				email,
 				password
 			);
+
+			setCurrentUser(user);
 
 			await createUserDocumentFromAuth(
 				user,

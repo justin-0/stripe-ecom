@@ -7,7 +7,11 @@ import {
 	createUserWithEmailAndPassword,
 	GoogleAuthProvider,
 	signInWithEmailAndPassword,
+	signOut,
 } from 'firebase/auth';
+
+import { useContext } from 'react';
+import { UserContext } from '../../context/userContext';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -79,4 +83,13 @@ export const signInUserWithEmailAndPassword = async (email, password) => {
 	if (!email || !password) return;
 
 	return await signInWithEmailAndPassword(auth, email, password);
+};
+
+export const signOutUser = async (cb) => {
+	try {
+		await signOut(auth);
+	} catch (error) {
+		console.log(error.message);
+	}
+	cb(null);
 };

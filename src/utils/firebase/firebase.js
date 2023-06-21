@@ -3,8 +3,8 @@ import { initializeApp } from 'firebase/app';
 import { getFirestore, doc, setDoc, getDoc } from 'firebase/firestore';
 import {
 	getAuth,
-	signInWithRedirect,
 	signInWithPopup,
+	createUserWithEmailAndPassword,
 	GoogleAuthProvider,
 } from 'firebase/auth';
 
@@ -30,28 +30,33 @@ provider.setCustomParameters({
 	prompt: 'select_account',
 });
 
+// Checks the auth instance from the oAuth provider
 export const auth = getAuth();
 export const signInWithGooglePopup = () => signInWithPopup(auth, provider);
 
 // Firestore Database Operations
 
 // Add new document to collection
-export const createUserDocumentFromAuth = async (userAuthObject) => {
-	const { user } = userAuthObject;
+export const createUserDocumentFromAuth = async (
+	userAuth,
+	additionalInformation
+) => {
 	// Reference to Document Object
-	const userDocRef = doc(db, 'users', user.uid);
+	const userDocRef = doc(db, 'users', userAuth.uid);
 
 	// Document in Collection - does it exist?
 	const userSnapshot = await getDoc(userDocRef);
 
 	if (!userSnapshot.exists()) {
+		const { displayName, email } = userAuth;
 		try {
 			// Create Doc with Reference - Our database, 'users' collection and with key of uid from user
 			await setDoc(userDocRef, {
 				// Data to go into document from user object received from Google
-				name: user.displayName,
-				email: user.email,
+				displayName,
+				email,
 				createdAt: new Date(),
+				...additionalInformation,
 			});
 		} catch (error) {
 			console.log(error.message, 'error creating user');
@@ -59,4 +64,11 @@ export const createUserDocumentFromAuth = async (userAuthObject) => {
 	}
 
 	return userDocRef;
+};
+
+// Create User in Database with Email and Password
+export const createAuthUserWithEmailAndPassword = async (email, password) => {
+	if (!email || !password) return;
+
+	return await createUserWithEmailAndPassword(auth, email, password);
 };

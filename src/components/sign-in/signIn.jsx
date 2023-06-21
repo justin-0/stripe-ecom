@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import './signin.scss';
 import {
 	signInWithGooglePopup,
@@ -8,6 +8,7 @@ import {
 
 import FormInput from '../form-input/form-input';
 import Button from '../button/button';
+import { UserContext } from '../../context/userContext';
 
 const formFields = {
 	displayName: '',
@@ -17,6 +18,8 @@ const formFields = {
 };
 
 const SignInForm = () => {
+	const { setCurrentUser } = useContext(UserContext);
+
 	const [formData, setFormData] = useState(formFields);
 	const { email, password } = formData;
 
@@ -29,9 +32,9 @@ const SignInForm = () => {
 		evt.preventDefault();
 
 		try {
-			const resp = await signInUserWithEmailAndPassword(email, password);
-			console.log(resp);
+			const { user } = await signInUserWithEmailAndPassword(email, password);
 			setFormData(formFields);
+			setCurrentUser(user);
 		} catch (error) {
 			switch (error.code) {
 				case 'auth/wrong-password':

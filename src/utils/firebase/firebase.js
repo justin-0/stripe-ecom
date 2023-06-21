@@ -6,6 +6,7 @@ import {
 	signInWithPopup,
 	createUserWithEmailAndPassword,
 	GoogleAuthProvider,
+	signInWithEmailAndPassword,
 } from 'firebase/auth';
 
 // Your web app's Firebase configuration
@@ -39,6 +40,7 @@ export const signInWithGooglePopup = () => signInWithPopup(auth, provider);
 // Add new document to collection
 export const createUserDocumentFromAuth = async (
 	userAuth,
+	// Optional Object to Spread into setDoc Data
 	additionalInformation
 ) => {
 	// Reference to Document Object
@@ -71,4 +73,10 @@ export const createAuthUserWithEmailAndPassword = async (email, password) => {
 	if (!email || !password) return;
 
 	return await createUserWithEmailAndPassword(auth, email, password);
+};
+
+export const signInUserWithEmailAndPassword = async (email, password) => {
+	if (!email || !password) return;
+
+	return await signInWithEmailAndPassword(auth, email, password);
 };

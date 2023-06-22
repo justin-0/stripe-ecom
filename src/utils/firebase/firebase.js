@@ -8,10 +8,8 @@ import {
 	GoogleAuthProvider,
 	signInWithEmailAndPassword,
 	signOut,
+	onAuthStateChanged,
 } from 'firebase/auth';
-
-import { useContext } from 'react';
-import { UserContext } from '../../context/userContext';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -85,11 +83,14 @@ export const signInUserWithEmailAndPassword = async (email, password) => {
 	return await signInWithEmailAndPassword(auth, email, password);
 };
 
-export const signOutUser = async (cb) => {
+export const signOutUser = async () => {
 	try {
 		await signOut(auth);
 	} catch (error) {
 		console.log(error.message);
 	}
-	cb(null);
+};
+
+export const onAuthChangedListener = (callback) => {
+	onAuthStateChanged(auth, callback);
 };

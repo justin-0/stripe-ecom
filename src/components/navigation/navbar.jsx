@@ -1,6 +1,9 @@
-import { Link } from 'react-router-dom';
-import Logo from '../../assets/crown.svg';
 import { useContext } from 'react';
+import { Link } from 'react-router-dom';
+
+import Logo from '../../assets/crown.svg';
+import CartIcon from '../cart-icon/cart-icon';
+
 import { UserContext } from '../../context/userContext';
 import { signOutUser } from '../../utils/firebase/firebase';
 
@@ -27,6 +30,7 @@ const Navbar = () => {
 						SIGN IN
 					</Link>
 				)}
+				<CartIcon />
 			</div>
 		</div>
 	);

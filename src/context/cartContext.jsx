@@ -21,6 +21,22 @@ const addCartItem = (cartItems, productToAddToCart) => {
 	return [...cartItems, { ...productToAddToCart, quantity: 1 }];
 };
 
+const removeCartItem = (cartItems, productToRemove) => {
+	const foundItem = cartItems.find((item) => item.id === productToRemove.id);
+
+	if (foundItem.quantity === 1) {
+		return cartItems.filter((item) => item.id !== productToRemove.id);
+	}
+
+	if (foundItem) {
+		return cartItems.map((cartItem) =>
+			cartItem.id === productToRemove.id
+				? { ...cartItem, quantity: cartItem.quantity - 1 }
+				: cartItem
+		);
+	}
+};
+
 export const CartContext = createContext({});
 
 export const CartProvider = ({ children }) => {
@@ -31,11 +47,17 @@ export const CartProvider = ({ children }) => {
 		setCartItems(addCartItem(cartItems, productToAddToCart));
 	};
 
+	const removeItemFromCart = (productToRemoveFromCart) => {
+		setCartItems(removeCartItem(cartItems, productToRemoveFromCart));
+	};
+
 	const value = {
 		cartOpen,
 		setCartOpen,
 		cartItems,
+		setCartItems,
 		addItemToCart,
+		removeItemFromCart,
 	};
 
 	return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

@@ -5,7 +5,7 @@ import CheckoutItem from '../../components/checkout-item/checkout-item';
 import './checkout.scss';
 
 const Checkout = () => {
-	const { cartItems, setCartOpen } = useContext(CartContext);
+	const { cartItems, setCartOpen, cartTotal } = useContext(CartContext);
 
 	useEffect(() => {
 		setCartOpen(false);
@@ -38,11 +38,11 @@ const Checkout = () => {
 					// 	<h2>{name}</h2>
 					// 	<span>{quantity}</span>
 					// 	<span onClick={() => removeItemFromCart(item)}>decrease</span>
-					// 	<span onClick={() => addItemToCart(item)}>increase</span>
+					// 	<span onClick={() => addItemToCart(cartItem)}>increase</span>
 					// </div>
 				);
 			})}
-			<span className='total'>Total:</span>
+			<span className='total'>Total: £{cartTotal}</span>
 		</div>
 	);
 };
